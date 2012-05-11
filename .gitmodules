@@ -1,0 +1,3 @@
+[submodule "lib/start"]
+	path = lib/start
+	url = git@github.com:petrh/start.git
