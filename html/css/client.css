@@ -1,0 +1,23 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+#canvas {
+  background: #eee;
+  border: 1px solid #000;
+  position:relative; /* needed for footer positioning*/
+  margin:0 auto; /* center, not in IE5 */
+  height:auto !important; /* real browsers */
+  height:90%; /* IE6: treaded as min-height*/
+  min-height:90%; /* real browsers */
+  width: 90%;
+}
+
+#control {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+}
