@@ -12,14 +12,14 @@
         padding: 0;
       }
       button {
-        height: 20%;
+        height: 10%;
         width: 100%;
         display: block;
         font-size: 24px;
       }
       #swipe {
         width: 100%;
-        height: 60%;
+        height: 70%;
         color: #FFF;
         font-size: 24px;
         background-color: #333;
@@ -27,9 +27,11 @@
     </style>
   </head>
   <body>
+  <div id="swipe"></div>
+  <button value="previous" style="width: 50%; float:left;">&lt;</button>
+  <button value="next" style="width: 50%; float:right;">&gt;</button>
   <button value="reset">RESET</button>
   <button value="refresh">REFRESH</button>
-  <div id="swipe"></div>
 
   <script type="application/dart" src="controller.dart"></script>
   <script src="http://dart.googlecode.com/svn/branches/bleeding_edge/dart/client/dart.js"></script>

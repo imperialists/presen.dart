@@ -19,6 +19,7 @@
 class App extends Server {
   int _state = 1;
   Set _clients;
+  Client _presenter;
 
   /**
    * Send message to all connected clients.
@@ -39,6 +40,11 @@ class App extends Server {
       Client client = new Client(conn);
       _clients.add(client);
 
+      if (_clients.length == 1) {
+        _presenter = client;
+        client.send({ 'presenter': [] });
+      }
+
       conn.onMessage = (message) {
         print('message $message');
       };
@@ -50,9 +56,13 @@ class App extends Server {
 
       conn.onError = (e) {
         print('client error $e');
+        _clients.remove(client);
       };
 
-      send({ 'state' : 1 });
+      client.send({ 'state' : _state });
+
+      // generate client button bars
+      _presenter.send({ 'client': client.hashCode() });
     };
 
     WebSocketHandler controllerHandler = new WebSocketHandler();
@@ -61,27 +71,46 @@ class App extends Server {
 
     controllerHandler.onOpen = (WebSocketConnection conn) {
       conn.onMessage = (message) {
-        switch (message) {
-          case 'next':
-            print('socket: move to previous');
-            _state++;
-            send({ "state": _state });
+        Map value = JSON.parse(message);
+        switch (value['command']) {
+          case 'move':
+            switch (value['direction']) {
+              case 'next':
+                print('socket: move to previous');
+                _state++;
+                send({ "state": _state });
+                break;
+              case 'previous':
+                print('socket: move to previous');
+                _state--;
+                send({ 'state': _state });
+                break;
+              case 'refresh':
+                print('socket: refresh');
+                send({ 'refresh': true });
+                break;
+              case 'reset':
+                print('socket: reset');
+                _state = 1;
+                send({ 'state': _state });
+                break;
+            }
             break;
-          case 'previous':
-            print('socket: move to previous');
-            _state--;
-            send({ 'state': _state });
-            break;
-          case 'refresh':
-            print('socket: refresh');
-            send({ 'refresh': true });
-            break;
-          case 'reset':
-            print('socket: reset');
-            _state = 1;
-            send({ 'state': _state });
+          case 'switch':
+            int id = value['presenter'];
+            _clients.forEach((client) {
+              if (client.hashCode() == id) {
+                List pres = [];
+                _clients.forEach((c) => pres.add(c.hashCode()));
+                client.send({ 'presenter': pres });
+              }
+            });
             break;
         }
+      };
+
+      conn.onError = (e) {
+        print('control error $e');
       };
     };
 
@@ -134,5 +163,6 @@ void main() {
   });
 
   server.listen(3000);*/
-  new Start.runServer(new App(), '127.0.0.1', 3000);
+  new Start.runServer(new App(), '192.168.146.49', 3000);
+  //new Start.runServer(new App(), '127.0.0.1', 3000);
 }

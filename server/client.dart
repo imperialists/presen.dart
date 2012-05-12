@@ -15,5 +15,5 @@ class Client implements Hashable {
 
   // Hash code for the client
   int _hashCode;
-  static int _nextHashCode = 0;
+  static int _nextHashCode = 1;
 }
