@@ -1,6 +1,9 @@
-[submodule "lib/start"]
-	path = lib/start
-	url = git@github.com:imperialists/start.git
+[submodule "lib/express.dart"]
+	path = lib/express.dart
+	url = git@github.com:imperialists/express.dart.git
 [submodule "lib/hart"]
 	path = lib/hart
 	url = git@github.com:imperialists/hart.git
+[submodule "lib/socket.dart"]
+	path = lib/socket.dart
+	url = git@github.com:imperialists/socket.dart.git

@@ -1,30 +1,12 @@
-#library("presen.dart");
+#library('server.dart');
 
-#import("../lib/start/lib/start.dart");
-#import("../lib/start/lib/server.dart");
+#import('../lib/express.dart/lib/start.dart');
+#import('../lib/express.dart/lib/server.dart');
 
-#import("dart:json");
-#import("dart:io");
+#import('dart:json');
+#import('dart:io');
 
-class Client implements Hashable {
-  Client(this._connection) {
-    _hashCode = _nextHashCode;
-    _nextHashCode = (_nextHashCode + 1) & 0xFFFFFFF;
-  }
-
-  send(Object message) {
-    _connection.send(JSON.stringify(message));
-  }
-
-  int hashCode() => _hashCode;
-
-  // Client web socket connection
-  WebSocketConnection _connection;
-
-  // Hash code for the client
-  int _hashCode;
-  static int _nextHashCode = 0;
-}
+#source('client.dart');
 
 /**
  * Request handler.
@@ -71,6 +53,36 @@ class App extends Server {
       };
     };
 
+    WebSocketHandler controllerHandler = new WebSocketHandler();
+    server.addRequestHandler((req) => req.path == '/control',
+      controllerHandler.onRequest);
+
+    controllerHandler.onOpen = (WebSocketConnection conn) {
+      conn.onMessage = (message) {
+        switch (message) {
+          case 'next':
+            print('socket: move to previous');
+            _state++;
+            send({ "state": _state });
+            break;
+          case 'previous':
+            print('socket: move to previous');
+            _state--;
+            send({ 'state': _state });
+            break;
+          case 'refresh':
+            print('socket: refresh');
+            send({ 'refresh': true });
+            break;
+          case 'reset':
+            print('socket: reset');
+            _state = 1;
+            send({ 'state': _state });
+            break;
+        }
+      };
+    };
+
     get('/next', (req, res) {
       print('move to next');
       _state++;
@@ -102,7 +114,9 @@ class App extends Server {
       res.send(_state.toString());
     });
 
-    get('/controller', (req, res) {
+    static = '../client';
+
+    /*get('/controller', (req, res) {
       print('controller');
       res.sendfile('../client/controller.html');
     });
@@ -115,7 +129,7 @@ class App extends Server {
     get('/controller.dart.js', (req, res) {
       print('controller');
       res.sendfile('../client/controller.dart.js');
-    });
+    });*/
   }
 }
 

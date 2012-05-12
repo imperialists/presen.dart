@@ -8,21 +8,21 @@
 #import('dart:html');
 #import('dart:json');
 
-class PresendartClient {
-  WebSocket _ws;
+class Client {
+  WebSocket _socket;
 
   void connect() {
-    String url = 'ws://${location.host}:${location.port}/ws';
+    final Location location = window.location;
+    String url = 'ws://${location.host}/ws';
     Element canvas = document.query('#canvas');
     canvas.innerHTML = 'Connecting to $url.. (Slide goes here)';
 
-    _ws = new WebSocket(url);
+    _socket = new WebSocket(url);
     // TODO: Check that _ws is valid
-    _ws.on.message.add((e) {
+    _socket.on.message.add((e) {
       Map msg = JSON.parse(e.data);
       updateSlides(msg);
     });
-
   }
 
   void updateSlides(Map msg) {
@@ -38,6 +38,6 @@ class PresendartClient {
 }
 
 void main() {
-  PresendartClient pc = new PresendartClient();
-  pc.connect();
+  Client client = new Client();
+  client.connect();
 }

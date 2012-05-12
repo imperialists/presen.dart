@@ -1,6 +1,16 @@
 #import('dart:html');
 #import('dart:json');
 
+class Controller {
+  WebSocket _socket;
+
+  Controller() {
+    final Location location = window.location;
+    String url = 'ws://${location.host}/control';
+    _socket = new WebSocket(url);
+  }
+}
+
 /**
  * Controller.
  * This should be loaded by the presenter html page.
@@ -9,9 +19,11 @@
  * Sends requests to server by sending HTTP requests.
  */
 void main() {
+  Controller controller = new Controller();
+
   document.queryAll('button').forEach((button) {
     button.on.click.add((event) {
-      send(button.value);
+      controller._socket.send(button.value);
     });
   });
 
