@@ -17,9 +17,7 @@ class PresendartClient {
   }
 
   void connect() {
-    String host = document.query('#host_id').value;
-    String path = document.query('#path_id').value;
-    String url  = 'ws://$host/$path';
+    String url  = 'ws://127.0.0.1:3000/ws';
     Element canvas = document.query('#canvas');
     canvas.innerHTML = 'Connecting to $url.. (Slide goes here)';
 
@@ -46,7 +44,5 @@ class PresendartClient {
 
 void main() {
   PresendartClient pc = new PresendartClient();
-  document.query('#startbutton').on.click.add((e) {
-    pc.connect();
-  });
+  pc.connect();
 }
