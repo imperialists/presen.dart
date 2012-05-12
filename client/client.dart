@@ -14,23 +14,28 @@ class Client {
   void connect() {
     final Location location = window.location;
     String url = 'ws://${location.host}/ws';
-    Element canvas = document.query('#canvas');
-    canvas.innerHTML = 'Connecting to $url.. (Slide goes here)';
+    //Element canvas = document.query('#canvas');
+    //canvas.innerHTML = 'Connecting to $url.. (Slide goes here)';
 
     _socket = new WebSocket(url);
     // TODO: Check that _ws is valid
     _socket.on.message.add((e) {
+      print('1');
       Map msg = JSON.parse(e.data);
+      print('2');
       updateSlides(msg);
     });
   }
 
   void updateSlides(Map msg) {
-    if (msg['state']) {
-      if (window.location.contains(new RegExp('#'))) {
-        window.location.assign(window.location.replace(new RegExp('#[0-9]*'), '#'+msg['state']));
+    print('3');
+    if (msg['state'] is num) {
+      print('4');
+      print(msg['state']);
+      if (window.location.toString().contains(new RegExp('#'))) {
+        window.location.assign(window.location.toString().replace(new RegExp('#[0-9]*'), '#${msg['state']}'));
       } else {
-        window.location.assign(window.location + '#' + msg['state']);
+        window.location.assign('${window.location}#${msg['state']}');
       }
       // window.location.hash = msg['state'];
     }
