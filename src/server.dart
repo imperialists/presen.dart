@@ -6,6 +6,26 @@
 #import("dart:json");
 #import("dart:io");
 
+class Client implements Hashable {
+  Client(this._connection) {
+    _hashCode = _nextHashCode;
+    _nextHashCode = (_nextHashCode + 1) & 0xFFFFFFF;
+  }
+
+  send(Object message) {
+    _connection.send(JSON.stringify(message));
+  }
+
+  int hashCode() => _hashCode;
+
+  // Client web socket connection
+  WebSocketConnection _connection;
+
+  // Hash code for the client
+  int _hashCode;
+  static int _nextHashCode = 0;
+}
+
 /**
  * Request handler.
  * This is a standalone app listening on websockets.
@@ -24,7 +44,6 @@ class App extends Server {
   send(Map message) {
     print('send $message to all clients');
     _clients.forEach((client) {
-      print('send to client $client');
       client.send(message);
     });
   }
@@ -35,11 +54,16 @@ class App extends Server {
 
     handler.onOpen = (WebSocketConnection conn) {
       print('client connected');
-      _clients.add(conn);
+      Client client = new Client(conn);
+      _clients.add(client);
+
+      conn.onMessage = (message) {
+        print('message $message');
+      };
 
       conn.onClosed = (int status, String reason) {
         print('client disconnected');
-        _clients.remove();
+        _clients.remove(client);
       };
 
       conn.onError = (e) {
@@ -78,7 +102,7 @@ class App extends Server {
       res.send(_state.toString());
     });
 
-    get('.*', (req, res) {
+    get('/controller', (req, res) {
       print('controller');
       res.sendfile('controller.html');
     });

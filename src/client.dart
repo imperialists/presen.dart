@@ -9,7 +9,6 @@
 #import('dart:json');
 
 class PresendartClient {
-
   bool _sync;
   WebSocket _ws;
 
@@ -26,12 +25,10 @@ class PresendartClient {
 
     _ws = new WebSocket(url);
     // TODO: Check that _ws is valid
-    _ws.on.message.add(
-      (e) {
-        Map msg = JSON.parse(e.data);
-        updateSlides(msg);
-      }
-    );
+    _ws.on.message.add((e) {
+      Map msg = JSON.parse(e.data);
+      updateSlides(msg);
+    });
 
   }
 
@@ -47,11 +44,9 @@ class PresendartClient {
 
 }
 
-void main()
-{
+void main() {
   PresendartClient pc = new PresendartClient();
-  document.query('#startbutton').on.click.add(
-    (e) {
-      pc.connect();
-    });
+  document.query('#startbutton').on.click.add((e) {
+    pc.connect();
+  });
 }
