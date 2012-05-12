@@ -27,7 +27,12 @@ class Client {
 
   void updateSlides(Map msg) {
     if (msg['state']) {
-      window.location.hash = msg['state'];
+      if (window.location.contains(new RegExp('#'))) {
+        window.location.assign(window.location.replace(new RegExp('#[0-9]*'), '#'+msg['state']));
+      } else {
+        window.location.assign(window.location + '#' + msg['state']);
+      }
+      // window.location.hash = msg['state'];
     }
 
     if (msg['refresh']) {
