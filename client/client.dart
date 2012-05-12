@@ -12,7 +12,7 @@ class PresendartClient {
   WebSocket _ws;
 
   void connect() {
-    String url  = 'ws://127.0.0.1:3000/ws';
+    String url = 'ws://${location.host}:${location.port}/ws';
     Element canvas = document.query('#canvas');
     canvas.innerHTML = 'Connecting to $url.. (Slide goes here)';
 
