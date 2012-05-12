@@ -6,29 +6,43 @@
  */
 
 #import('dart:html');
-#import('dart:io');
 #import('dart:json');
 
 class PresendartClient {
 
   bool _sync;
-  Socket _socket;
+  WebSocket _ws;
 
-  void connect() {
-    String host = document.query('#host_id').attributes['value'];
-    int port = Math.parseInt(document.query('#port_id').attributes['value']);
-    Element canvas = document.query('#canvas');
-    canvas.innerHTML = 'Connecting to $host:$port.. (Slide goes here)';
-
-    _socket = new Socket(host, port);
-
-    _socket.onData = () {
-      Map data = JSON.parse(_socket.inputStream.read().toString());
-      updateSlides(data);
-    };
+  PresendartClient() {
+    _sync = false;
   }
 
-  void updateSlides(Map data) {
+  void connect() {
+    String host = document.query('#host_id').value;
+    String path = document.query('#path_id').value;
+    String url  = 'ws://$host/$path';
+    Element canvas = document.query('#canvas');
+    canvas.innerHTML = 'Connecting to $url.. (Slide goes here)';
+
+    _ws = new WebSocket(url);
+    // TODO: Check that _ws is valid
+    _ws.on.message.add(
+      (e) {
+        Map msg = JSON.parse(e.data);
+        updateSlides(msg);
+      }
+    );
+
+  }
+
+  void updateSlides(Map msg) {
+    if (_sync && msg['state']) {
+      window.location.hash = msg['state'];
+    }
+
+    if (msg['refresh']) {
+      window.location.reload();
+    }
   }
 
 }
@@ -37,6 +51,7 @@ void main()
 {
   PresendartClient pc = new PresendartClient();
   document.query('#startbutton').on.click.add(
-    (e) { pc.connect(); }
-  );
+    (e) {
+      pc.connect();
+    });
 }
