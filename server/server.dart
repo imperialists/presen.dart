@@ -104,7 +104,12 @@ class App extends Server {
 
     get('/controller', (req, res) {
       print('controller');
-      res.sendfile('controller.html');
+      res.sendfile('../client/controller.html');
+    });
+
+    get('/controller.dart', (req, res) {
+      print('controller');
+      res.sendfile('../client/controller.dart');
     });
   }
 }
