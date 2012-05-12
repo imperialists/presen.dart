@@ -1,7 +1,7 @@
 #library('server.dart');
 
-#import('../lib/express.dart/lib/start.dart');
-#import('../lib/express.dart/lib/server.dart');
+#import('../lib/start/lib/start.dart');
+#import('../lib/start/lib/server.dart');
 
 #import('dart:json');
 #import('dart:io');
@@ -115,24 +115,20 @@ class App extends Server {
     });
 
     static = '../client';
-
-    /*get('/controller', (req, res) {
-      print('controller');
-      res.sendfile('../client/controller.html');
-    });
-
-    get('/controller.dart', (req, res) {
-      print('controller');
-      res.sendfile('../client/controller.dart');
-    });
-
-    get('/controller.dart.js', (req, res) {
-      print('controller');
-      res.sendfile('../client/controller.dart.js');
-    });*/
   }
 }
 
 void main() {
+  /*Server server = new Server.createServer();
+
+  server.get('/', (req, res) {
+    res.redirect('/index.html');
+  });
+
+  server.configure(() {
+    server.static = '../client';
+  });
+
+  server.listen(3000);*/
   new Start.runServer(new App(), '127.0.0.1', 3000);
 }
