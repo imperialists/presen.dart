@@ -45,6 +45,10 @@ void main() {
 }
 
 void send(String command) {
-  new XMLHttpRequest.get('http://localhost:3000/$command', (req) {
-  });
+  final Location location = window.location;
+  XMLHttpRequest request = new XMLHttpRequest();
+  request.open('GET', '${command}');
+  request.send(null);
+  //new XMLHttpRequest.get('${location.protocol}/${command}', (req) {
+  //});
 }

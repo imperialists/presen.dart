@@ -111,6 +111,11 @@ class App extends Server {
       print('controller');
       res.sendfile('../client/controller.dart');
     });
+
+    get('/controller.dart.js', (req, res) {
+      print('controller');
+      res.sendfile('../client/controller.dart.js');
+    });
   }
 }
 
