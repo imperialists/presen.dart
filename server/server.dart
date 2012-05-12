@@ -51,6 +51,8 @@ class App extends Server {
       conn.onError = (e) {
         print('client error $e');
       };
+
+      send({ 'state' : 1 });
     };
 
     WebSocketHandler controllerHandler = new WebSocketHandler();
@@ -93,7 +95,9 @@ class App extends Server {
 
     get('/previous', (req, res) {
       print('move to previous');
-      _state--;
+      if (_state > 2) {
+        _state--;
+      }
       send({ 'state': _state });
 
       res.send(_state.toString());
