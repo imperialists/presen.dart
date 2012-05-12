@@ -9,12 +9,7 @@
 #import('dart:json');
 
 class PresendartClient {
-  bool _sync;
   WebSocket _ws;
-
-  PresendartClient() {
-    _sync = false;
-  }
 
   void connect() {
     String url  = 'ws://127.0.0.1:3000/ws';
@@ -31,7 +26,7 @@ class PresendartClient {
   }
 
   void updateSlides(Map msg) {
-    if (_sync && msg['state']) {
+    if (msg['state']) {
       window.location.hash = msg['state'];
     }
 
