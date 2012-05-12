@@ -7,13 +7,15 @@
   </head>
   <body>
     <div id='canvas'>
-      Enter the server address and post and click 'Connect now'
+      Enter the server host and path, then click 'Connect now'
     </div>
     <div id='control'>
-      <input type='text' id='host_id' placeholder='Server address'/>
-      <input type='text' id='port_id' placeholder='Server port'/>
+      ws://
+      <input type='text' id='host_id' placeholder='Server host'/>/
+      <input type='text' id='path_id' placeholder='Server path'/>
       <button id='startbutton'>Connect now</button>
     </div>
     <script src="http://dart.googlecode.com/svn/branches/bleeding_edge/dart/client/dart.js"></script>
+    <!--<script type='text/javascript' src='../src/client.dart.js'></script>-->
   </body>
 </html>
